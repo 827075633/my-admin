@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {
   Form, Icon, Input, Button, message} from 'antd'
-
+import {Redirect} from 'react-router'
 import './login.less'
-import logo from './images/logo.png'
+import logo from '../../assets/images/logo.png'
 import {reqLogin} from '../../api'
 import memoryUitls from '../../utils/memoryUtils.js'
+import storageUtils from '../../utils/storageUtils.js'
 /**
  * 登录路由组件
  */
@@ -28,7 +29,8 @@ class Login extends Component {
       // const result = response.data
       if (result.status === 0) {
         const user = result.data
-        memoryUitls.user = user
+        memoryUitls.user = user //保存到内存中
+        storageUtils.saveUser(user) // 保存到localStorage中
         message.success('登录成功')
         this.props.history.replace('/')
       } else {
@@ -36,11 +38,17 @@ class Login extends Component {
       }
       console.log('请求成功', result)
     } else {
-      console.log('检验失败！')
+      console.log('效验失败！')
     }
   });
  }
   render() {
+    // 如果已经登陆就无需在进入到登陆页面
+    const user = memoryUitls.user
+    if (user && user._id) {
+      return <Redirect to="/"/>
+    }
+
     const from = this.props.form;
     const { getFieldDecorator } = from;
     return (
@@ -97,6 +105,9 @@ class Login extends Component {
     );
   }
 }
-
+/*
+包装Form组件生成一个新的组件: Form(Login)
+新组件会向Form组件传递一个强大的对象属性: form
+ */
 const WrapLogin = Form.create()(Login)
 export default WrapLogin
