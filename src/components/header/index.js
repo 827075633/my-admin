@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
+import LinkButton from '../link-button'
 import {formateDate} from '../../utils/dateUtils'
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
@@ -86,7 +87,8 @@ class Header extends Component {
       <div className='header'>
         <div className="header-top">
           <span>欢迎{user}</span>
-          <a href="javascript:;" onClick={this.logoOut}>退出</a>
+          {/* <a href="javascript:;" onClick={this.logoOut}>退出</a> */}
+          <LinkButton onClick={this.logoOut}>退出</LinkButton>
         </div>
         <div className="header-bottom">
           <div className="header-bottom-left">{title}</div>
